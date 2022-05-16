@@ -5,8 +5,16 @@ import (
 )
 
 func TestHash(t *testing.T) {
-	shortUrl := ShortenUrl("https://pkg.go.dev/hash/fnv@go1.18.2#New128")
-	t.Log(shortUrl)
+	url := "https://pkg.go.dev/hash/fnv@go1.18.2#New128"
+	url2 := "https://gobyexample.com/base64-encoding"
+	t.Logf("%x", hashMethod.Sum([]byte(url)))
+	// t.Logf("%x", hashMethod.Sum([]byte(url)))
+	t.Logf("%x", sha.Sum([]byte(url)))
+	t.Logf("%x", sha.Sum([]byte(url2)))
+	sha.Write([]byte(url2))
+	t.Logf("%x", sha.Sum(nil))
+	sha.Reset()
+	t.Logf("%x", sha.Sum([]byte(url)))
 }
 
 func TestShortUrlLength(t *testing.T) {
