@@ -8,13 +8,15 @@ import (
 	"tiny-url/database"
 )
 
+var UrlPrefix = "http://" + Host + ":" + Port + "/"
+
 func init() {
 	go startServer() // TODO potential bug becuase of race between the server thread and the test thread
 }
 
 func TestRedirectToStoredUrl(t *testing.T) {
 	tinyUrl, _ := store("https://recolabs.dev/")
-	resp, err := http.Get("http://localhost:8080/" + tinyUrl)
+	resp, err := http.Get(UrlPrefix + tinyUrl)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -26,7 +28,7 @@ func TestRedirectToStoredUrl(t *testing.T) {
 // TODO break down this flow to multiple test cases
 func TestPostNewEntry(t *testing.T) {
 	url := "https://github.com/Tzion?tab=repositories"
-	resp, err := http.Post("http://localhost:8080/", "text/plain", bytes.NewBufferString(url))
+	resp, err := http.Post(UrlPrefix, "text/plain", bytes.NewBufferString(url))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,7 +50,7 @@ func TestPostNewEntry(t *testing.T) {
 }
 
 func TestRequestFaultyTinyUrl(t *testing.T) {
-	resp, err := http.Get("http://localhost:8080/" + "NowsGod6GUI=")
+	resp, err := http.Get(UrlPrefix + "NowsGod6GUI=")
 	if err != nil {
 		t.Fatal(err)
 	}

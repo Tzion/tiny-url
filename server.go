@@ -11,14 +11,18 @@ import (
 	"tiny-url/shortener"
 )
 
+var Host string = "localhost"
+var Port string = "8080"
+
 func main() {
 	startServer()
 }
 
 func startServer() {
-	fmt.Printf("Starting tiny-url server\n")
+	address := Host + ":" + Port
+	fmt.Printf("Starting tiny-url server on address: %s\n", address)
 	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(address, nil))
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
