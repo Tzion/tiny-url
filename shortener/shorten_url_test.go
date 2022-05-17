@@ -18,7 +18,7 @@ func TestHashedUrlLength(t *testing.T) {
 		t.Run(string(url), func(t *testing.T) {
 			shortUrl := hashUrl(url)
 			if urlLen, hashLen := len(shortUrl), hashMethod.Size(); urlLen != hashLen {
-				t.Errorf("length of short url is wrong\nhave %d\nwant %d", urlLen, hashLen)
+				t.Errorf("length of hashed url is wrong\nhave %d\nwant %d", urlLen, hashLen)
 			}
 		})
 	}

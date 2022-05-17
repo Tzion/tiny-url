@@ -6,7 +6,7 @@ import (
 	"hash/fnv"
 )
 
-var hashMethod hash.Hash = fnv.New64a() // FNV-1a if chosen due to low collision rate and high execution speed
+var hashMethod hash.Hash = fnv.New64a() // FNV-1a is chosen due to low collision rate and high execution speed
 
 func ShortenUrl(url string) string {
 	hashedUrl := hashUrl(url)
@@ -24,3 +24,9 @@ func hashUrl(url string) []byte {
 func encode(hashed []byte) string {
 	return base64.StdEncoding.EncodeToString(hashed)
 }
+
+/**
+TODO's
+	- Consider using dedicated struct/type for Url
+	- Url validation
+**/
