@@ -1,8 +1,10 @@
-package main
+package has
 
 import (
 	"testing"
 )
+
+//TODO bug: init() function of server.go is running with no need
 
 var urls = []string{
 	"https://pkg.go.dev/hash/fnv@go1.18.2#New128",
