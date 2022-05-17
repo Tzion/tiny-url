@@ -6,6 +6,11 @@ package database
 	For sake of simplicity I chose to keep single mapping at the moment.
 **/
 
+/**
+TODO
+	- Better handling with collision - now we overrides the old entry
+**/
+
 import (
 	"log"
 )
@@ -41,9 +46,10 @@ func Insert(shortUrl string, longUrl string) {
 		if currentLongUrl == longUrl {
 			return
 		} else {
-			log.Printf("Collision in entry %q. Overriding with latest value.", shortUrl)
+			log.Printf("Collision in entry %q. Overriding with latest value: %q", shortUrl, longUrl)
 			Database.shortToLongUrl[shortUrl] = longUrl
 		}
 	}
+	log.Printf("New entry: %q -> %q", shortUrl, longUrl)
 	Database.shortToLongUrl[shortUrl] = longUrl
 }

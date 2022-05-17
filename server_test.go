@@ -9,29 +9,29 @@ import (
 )
 
 func init() {
-	go startServer()
+	go startServer() // TODO potential bug becuase of race between the server thread and the test thread
 }
-func TestGet(t *testing.T) {
-	resp, err := http.Get("http://localhost:8080/tzions12")
-	t.Log(resp)
+
+func TestRedirectToStoredUrl(t *testing.T) {
+	tinyUrl, url := store("https://recolabs.dev/")
+	resp, err := http.Get("http://localhost:8080/" + tinyUrl)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
+	t.Log(resp.StatusCode)
+	t.Log(resp)
+	t.Log(url)
 }
 
-func TestRedirect(t *testing.T) {
-
-}
-
-func TestUnsupportedhttpMethods(t *testing.T) {
-
-}
-
+// TODO break down this flow to multiple test cases
 func TestPostNewEntry(t *testing.T) {
 	url := "https://github.com/Tzion?tab=repositories"
 	resp, err := http.Post("http://localhost:8080/", "text/plain", bytes.NewBufferString(url))
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
+	}
+	if resp.StatusCode >= 300 { // TODO can be done better
+		t.Fatalf("Received bad status code from server: %d", resp.StatusCode)
 	}
 	bodyBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
