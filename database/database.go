@@ -1,8 +1,9 @@
 package database
 
 /**
-TODO
-	* Find elegant solution to initialization
+	Adding the reversed mapping (longToShortUrl) could be taken as consideration,
+	it can be handy to save calculation of the hash in cost of size (Time vs. Space)
+	For sake of simplicity I chose to keep single mapping at the moment.
 **/
 
 import (
@@ -16,36 +17,16 @@ type database struct {
 var Database database = database{
 	shortToLongUrl: make(map[string]string),
 }
-var initialized bool
-
-// func init() {
-// 	setup()
-// }
-
-func setup() {
-	if initialized {
-		return
-	}
-	Database.shortToLongUrl = make(map[string]string)
-	initialized = true
-}
 
 func reset() {
-	initialized = false
-	setup()
+	Database.shortToLongUrl = make(map[string]string)
 }
 
 func Size() int {
-	if !initialized {
-		setup()
-	}
 	return len(Database.shortToLongUrl)
 }
 
 func FetchLongUrl(shortUrl string) *string {
-	if !initialized {
-		setup()
-	}
 	longUrl, exists := Database.shortToLongUrl[shortUrl]
 	if exists {
 		return &longUrl
@@ -55,15 +36,12 @@ func FetchLongUrl(shortUrl string) *string {
 }
 
 func Insert(shortUrl string, longUrl string) {
-	if !initialized {
-		setup()
-	}
 	currentLongUrl, exists := Database.shortToLongUrl[shortUrl]
 	if exists {
 		if currentLongUrl == longUrl {
 			return
 		} else {
-			log.Printf("Collision upon entry %s. Overriding with latest value", shortUrl)
+			log.Printf("Collision in entry %q. Overriding with latest value.", shortUrl)
 			Database.shortToLongUrl[shortUrl] = longUrl
 		}
 	}
