@@ -1,4 +1,4 @@
-package has
+package shortener
 
 import (
 	"encoding/base64"
