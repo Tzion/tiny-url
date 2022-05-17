@@ -21,6 +21,12 @@ func (db database) init() {
 		return
 	}
 	Database.shortToLongUrl = make(map[string]string)
+	initialized = true
+}
+
+func (db database) reset() {
+	initialized = false
+	Database.init()
 }
 
 func (db database) len() int {
@@ -51,7 +57,7 @@ func (db database) Insert(shortUrl string, longUrl string) {
 		if currentLongUrl == longUrl {
 			return
 		} else {
-			log.Panicf("Collision upon entry %s. Overriding with latest value", shortUrl)
+			log.Printf("Collision upon entry %s. Overriding with latest value", shortUrl)
 			db.shortToLongUrl[shortUrl] = longUrl
 		}
 	}
