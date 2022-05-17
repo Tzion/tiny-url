@@ -36,3 +36,8 @@ func getHandler(w http.ResponseWriter, r *http.Request) {
 func postHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("POST request for %q\n", html.EscapeString(r.URL.Path))
 }
+
+/**
+TODO's
+	- url validation
+**/

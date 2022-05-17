@@ -7,6 +7,7 @@ import (
 var urls = []string{
 	"https://pkg.go.dev/hash/fnv@go1.18.2#New128",
 	"https://gobyexample.com/base64-encoding",
+	"https://recolabs.dev/post/we-attended-the-go-israel-march-2022-meetup",
 	"https://stackoverflow.com/questions/25304080/callback-in-golang",
 	"https://golangr.com/golang-http-server/",
 	"https://gobyexample.com/base64-encoding",
