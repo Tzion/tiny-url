@@ -13,10 +13,16 @@ type database struct {
 	shortToLongUrl map[string]string
 }
 
-var Database database
+var Database database = database{
+	shortToLongUrl: make(map[string]string),
+}
 var initialized bool
 
-func (db database) init() {
+// func init() {
+// 	setup()
+// }
+
+func setup() {
 	if initialized {
 		return
 	}
@@ -24,23 +30,23 @@ func (db database) init() {
 	initialized = true
 }
 
-func (db database) reset() {
+func reset() {
 	initialized = false
-	Database.init()
+	setup()
 }
 
-func (db database) len() int {
+func Size() int {
 	if !initialized {
-		Database.init()
+		setup()
 	}
 	return len(Database.shortToLongUrl)
 }
 
-func (db database) FetchLongUrl(shortUrl string) *string {
+func FetchLongUrl(shortUrl string) *string {
 	if !initialized {
-		Database.init()
+		setup()
 	}
-	longUrl, exists := db.shortToLongUrl[shortUrl]
+	longUrl, exists := Database.shortToLongUrl[shortUrl]
 	if exists {
 		return &longUrl
 	} else {
@@ -48,18 +54,18 @@ func (db database) FetchLongUrl(shortUrl string) *string {
 	}
 }
 
-func (db database) Insert(shortUrl string, longUrl string) {
+func Insert(shortUrl string, longUrl string) {
 	if !initialized {
-		Database.init()
+		setup()
 	}
-	currentLongUrl, exists := db.shortToLongUrl[shortUrl]
+	currentLongUrl, exists := Database.shortToLongUrl[shortUrl]
 	if exists {
 		if currentLongUrl == longUrl {
 			return
 		} else {
 			log.Printf("Collision upon entry %s. Overriding with latest value", shortUrl)
-			db.shortToLongUrl[shortUrl] = longUrl
+			Database.shortToLongUrl[shortUrl] = longUrl
 		}
 	}
-	db.shortToLongUrl[shortUrl] = longUrl
+	Database.shortToLongUrl[shortUrl] = longUrl
 }
