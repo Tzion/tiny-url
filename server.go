@@ -3,8 +3,11 @@ package main
 import (
 	"fmt"
 	"html"
+	"io"
 	"log"
 	"net/http"
+	"tiny-url/database"
+	"tiny-url/shortener"
 )
 
 func main() {
@@ -34,5 +37,14 @@ func getHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func postHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("POST request for %q\n", html.EscapeString(r.URL.Path))
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	url := string(body)
+	log.Printf("POST request for %q\n", url)
+	tinyUrl := shortener.ShortenUrl(url)
+	database.Insert(tinyUrl, url)
+	w.Write([]byte(tinyUrl))
 }
